@@ -134,6 +134,27 @@ def get_pkg_data_files(share_dir):
     ]
 
 
+def get_pkg_copyright_start():
+    """Return supported Python interpreter versions."""
+    sys.path.append(os.path.join(get_pkg_dir(), get_pkg_name()))
+    import pkgdata
+
+    return pkgdata.COPYRIGHT_START
+
+
+def get_pkg_pkg_desc():
+    """Return supported Python interpreter versions."""
+    sys.path.append(os.path.join(get_pkg_dir(), get_pkg_name()))
+    import pkgdata
+
+    return pkgdata.PKG_DESC
+
+
+def get_pkg_dir():
+    """Return package name."""
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
 def get_pkg_name():
     """Return package name."""
     return os.path.basename(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -142,9 +163,7 @@ def get_pkg_name():
 def get_supported_interps():
     """Return supported Python interpreter versions."""
     # pylint: disable=W0122
-    pkg_name = get_pkg_name()
-    pkg_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    sys.path.append(os.path.join(pkg_dir, pkg_name))
+    sys.path.append(os.path.join(get_pkg_dir(), get_pkg_name()))
     import pkgdata
 
     return pkgdata.SUPPORTED_INTERPS
@@ -152,9 +171,7 @@ def get_supported_interps():
 
 def get_pkg_version():
     """Return supported Python interpreter versions."""
-    pkg_name = get_pkg_name()
-    pkg_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    sys.path.append(os.path.join(pkg_dir, pkg_name))
+    sys.path.append(os.path.join(get_pkg_dir(), get_pkg_name()))
     import pkgdata
 
     return pkgdata.__version__
