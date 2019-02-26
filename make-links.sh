@@ -32,6 +32,11 @@ for fname in ${fnames[*]}; do
     echo "Linking ${fname}"
     ln -sf "${sbin_dir}/${fname}" "${pkg_dir}/${fname}"
 done
+fname=conf.py
+if [ -d "${pkg_dir}/docs" ]; then
+    echo "Linking ${fname}"
+    ln -sf "${sbin_dir}/${fname}" "${pkg_dir}/docs/${fname}"
+fi
 fname=requirements_to_rst.py
 if [ -d "${pkg_dir}/docs/support" ]; then
     echo "Linking ${fname}"
