@@ -20,16 +20,12 @@ import pypkg.functions
 ###
 def read_file(fname):
     """Read file in Python 2 or Python 3."""
-    if sys.hexversion < 0x03000000:
+    try:
         with open(fname, "r") as fobj:
             return fobj.readlines()
-    else:
-        try:
-            with open(fname, "r") as fobj:
-                return fobj.readlines()
-        except UnicodeDecodeError:
-            with open(fname, "r", encoding="utf-8") as fobj:
-                return fobj.readlines()
+    except UnicodeDecodeError:
+        with open(fname, "r", encoding="utf-8") as fobj:
+            return fobj.readlines()
 
 
 def update_copyright_notice():

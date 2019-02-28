@@ -152,7 +152,9 @@ def get_pkg_pkg_desc():
 
 def get_pkg_dir():
     """Return package name."""
-    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    pkg_name = get_pkg_name()
+    __import__(pkg_name)
+    return os.path.dirname(os.path.abspath(sys.modules[pkg_name].__file__))
 
 
 def get_pkg_name():
@@ -163,6 +165,7 @@ def get_pkg_name():
 def get_supported_interps():
     """Return supported Python interpreter versions."""
     # pylint: disable=W0122
+    print(os.path.join(get_pkg_dir(), get_pkg_name()))
     sys.path.append(os.path.join(get_pkg_dir(), get_pkg_name()))
     import pkgdata
 

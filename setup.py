@@ -1,7 +1,7 @@
 # setup.py
 # Copyright (c) 2013-2019 Pablo Acosta-Serafini
 # See LICENSE for details
-# pylint: disable=C0111,E0601,E1111,R0904,W0122,W0201,W0621
+# pylint: disable=C0111,E0401,E0601,E1111,R0904,W0122,W0201,W0621
 
 # Taken in large part from:
 #    http://www.jeffknupp.com/blog/2013/08/16/
@@ -35,15 +35,20 @@ STEM = "pkgdata"
 FOUND = False
 for (DIRPATH, _, FNAMES) in os.walk(os.path.dirname(os.path.abspath(__file__))):
     for FNAME in FNAMES:
-        if os.path.basename(FNAME) == STEM + ".py":
-            exec(compile(open(os.path.join(DIRPATH, FNAME)).read(), STEM, "exec"))
-            PKG_NAME = os.path.basename(DIRPATH)
+        if os.path.splitext(os.path.basename(FNAME))[0] == STEM:
+            FNAME = os.path.join(DIRPATH, FNAME)
+            sys.path.append(DIRPATH)
+            import pkgdata
+
+            PKG_NAME = os.path.basename(
+                os.path.dirname(os.path.abspath(sys.modules["pkgdata"].__file__))
+            )
             FOUND = True
             break
 if not FOUND:
     raise RuntimeError("Supported Python interpreter versions cold not be found")
 PYTHON_VER = python_version("{0:0x}".format(sys.hexversion & 0xFFFF0000)[:-4])
-SUPPORTED_INTERPS = sorted(SUPPORTED_INTERPS)
+SUPPORTED_INTERPS = sorted(pkgdata.SUPPORTED_INTERPS)
 if PYTHON_VER not in SUPPORTED_INTERPS:
     sys.exit("Supported interpreter versions: {0}".format(", ".join(SUPPORTED_INTERPS)))
 
