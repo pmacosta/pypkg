@@ -48,15 +48,18 @@ fnames=( \
 )
 for fname in ${fnames[*]}; do
     echo "Copying ${fname}"
-    cp -f "${sbin_dir}/${fname}" "${pkg_dir}/${fname}"
+    rm -rf "${pkg_dir}/${fname:?}"
+    cp "${sbin_dir}/${fname}" "${pkg_dir}/${fname}"
 done
 fname=conf.py
 if [ -d "${pkg_dir}/docs" ]; then
     echo "Copying ${fname}"
-    cp -f "${sbin_dir}/${fname}" "${pkg_dir}/docs/${fname}"
+    rm -rf "${pkg_dir}/docs/${fname}"
+    cp "${sbin_dir}/${fname}" "${pkg_dir}/docs/${fname}"
 fi
 fname=requirements_to_rst.py
 if [ -d "${pkg_dir}/docs/support" ]; then
     echo "Copying ${fname}"
-    cp -f "${sbin_dir}/${fname}" "${pkg_dir}/docs/support/${fname}"
+    rm -rf "${pkg_dir}/docs/support/${fname}"
+    cp "${sbin_dir}/${fname}" "${pkg_dir}/docs/support/${fname}"
 fi
