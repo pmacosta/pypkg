@@ -116,6 +116,14 @@ def gen_manifest(make_wheel=False):
         fobj.writelines("\n".join(ret))
 
 
+def get_pkg_copyright_start():
+    """Return supported Python interpreter versions."""
+    sys.path.append(get_src_dir())
+    import pkgdata
+
+    return pkgdata.COPYRIGHT_START
+
+
 def get_pkg_data_files(share_dir):
     """Create data_files setup.py argument."""
     pkg_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -134,27 +142,12 @@ def get_pkg_data_files(share_dir):
     ]
 
 
-def get_pkg_copyright_start():
+def get_pkg_desc():
     """Return supported Python interpreter versions."""
-    sys.path.append(os.path.join(get_pkg_dir(), get_pkg_name()))
-    import pkgdata
-
-    return pkgdata.COPYRIGHT_START
-
-
-def get_pkg_pkg_desc():
-    """Return supported Python interpreter versions."""
-    sys.path.append(os.path.join(get_pkg_dir(), get_pkg_name()))
+    sys.path.append(get_src_dir())
     import pkgdata
 
     return pkgdata.PKG_DESC
-
-
-def get_pkg_dir():
-    """Return package name."""
-    pkg_name = get_pkg_name()
-    __import__(pkg_name)
-    return os.path.dirname(os.path.abspath(sys.modules[pkg_name].__file__))
 
 
 def get_pkg_name():
@@ -162,22 +155,40 @@ def get_pkg_name():
     return os.path.basename(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def get_supported_interps():
-    """Return supported Python interpreter versions."""
-    # pylint: disable=W0122
-    print(os.path.join(get_pkg_dir(), get_pkg_name()))
-    sys.path.append(os.path.join(get_pkg_dir(), get_pkg_name()))
-    import pkgdata
-
-    return pkgdata.SUPPORTED_INTERPS
-
-
 def get_pkg_version():
     """Return supported Python interpreter versions."""
-    sys.path.append(os.path.join(get_pkg_dir(), get_pkg_name()))
+    sys.path.append(get_src_dir())
     import pkgdata
 
     return pkgdata.__version__
+
+
+def get_src_dir():
+    """Return package name."""
+    # When requesting package directory for utility tasks, or when installing the
+    # package, the source file is the parent directory of the directory where the
+    # package management framework is located. However, when testing the package
+    # the package management framework is installed in a completely directory tree,
+    # thus its location has to be inferred by importing the package
+    pkg_name = get_pkg_name()
+    tdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    src_dir = os.path.join(tdir, pkg_name)
+    if os.path.exists(os.path.join(src_dir, "pkgdata.py")):
+        return src_dir
+    __import__(pkg_name)
+    src_dir = os.path.dirname(os.path.abspath(sys.modules[pkg_name].__file__))
+    if os.path.exists(src_dir):
+        return src_dir
+    raise RuntimeError("Could not find package source directory")
+
+
+def get_supported_interps():
+    """Return supported Python interpreter versions."""
+    # pylint: disable=W0122
+    sys.path.append(get_src_dir())
+    import pkgdata
+
+    return pkgdata.SUPPORTED_INTERPS
 
 
 def json_load(fname):

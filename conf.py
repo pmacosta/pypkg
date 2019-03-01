@@ -29,7 +29,7 @@ else:
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "pypkg"))
-from pypkg.functions import get_pkg_copyright_start, get_pkg_name, get_pkg_pkg_desc
+from pypkg.functions import get_pkg_copyright_start, get_pkg_name, get_pkg_desc
 
 PKG_NAME = get_pkg_name()
 COPYRIGHT_START_YEAR = get_pkg_copyright_start()
@@ -282,7 +282,7 @@ texinfo_documents = [
         u"src Documentation",
         u"Pablo Acosta-Serafini",
         PKG_NAME.capitalize() + " module",
-        get_pkg_pkg_desc(),
+        get_pkg_desc(),
         "Miscellaneous",
     )
 ]
