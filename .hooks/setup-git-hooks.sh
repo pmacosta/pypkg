@@ -113,6 +113,6 @@ if [ "${#hooks[@]}" != 0 ]; then
     cd "${git_hooks_dir}" || exit 1
     for hook in ${hooks[*]}; do
         echo "Setting ${hook} hook"
-    	ln -s -f "${sdir}/${hook}" "${hook}"
+        ln -s -f "${sdir}/${hook}" "${hook}"
     done
 fi
