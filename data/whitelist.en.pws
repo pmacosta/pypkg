@@ -1,4 +1,4 @@
-personal_ws-1.1 en 1748 utf-8
+personal_ws-1.1 en 1751 utf-8
 a4paper
 aa
 aaa
@@ -1116,6 +1116,7 @@ pipcmd
 pipefail
 pkgdata
 pkgdir
+pkgname
 pkgs
 pkl
 plist
@@ -1426,6 +1427,7 @@ slateblue
 slategray
 slaveinput
 slaveoutput
+slength
 slist
 smant
 SmartyPants
@@ -1472,6 +1474,7 @@ StEp
 stoken
 stopts
 str
+strcat
 strerror
 strframe
 strftime

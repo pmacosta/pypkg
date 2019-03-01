@@ -88,7 +88,7 @@ show_time () {
 	else
 		((sec=num))
 	fi
-	local ret="Ellapsed time: "
+	local ret="Elapsed time: "
 	if [ "${day}" != 0 ]; then
 		ret="${ret} ${day}d"
 		if [ "${hour}" != 0 ] || \
@@ -129,7 +129,7 @@ validate_num_cpus () {
 	fi
 	if [ "${num_cpus}" == "" ]; then
 		echo "${script_name}: number of CPUs has to be"\
-		     "an intenger greater than 0" >&2
+		     "an integer greater than 0" >&2
 		echo "ERROR"
 		return 1
 	fi
@@ -158,7 +158,7 @@ get_pyvers () {
     sdir=$(readlink -f "$(dirname "${BASH_SOURCE[0]}")")
     # shellcheck disable=SC1090,SC1091
     source "${sdir}/functions.sh"
-    pkgname="$(basename "$(dirname "${sdir}")")"
+    pkgname="$(basename "$(dirname "${sdir}")" | sed -r -e "s/-/_/g")"
     cmd=$(strcat \
         "from __future__ import print_function;" \
         "from ${pkgname}.pkgdata import SUPPORTED_INTERPS;" \

@@ -32,12 +32,16 @@ dnames="$(find "${source_dir}" -name "*.py" -printf '%h\n' | sort -u)"
 for dname in ${dnames[*]}; do
     ret="$(add_to_output "${ret}" "${dname}")"
 done
-dnames="$(find "${extra_dir}/tests" -name "*.py" -printf '%h\n' | sort -u)"
-for dname in ${dnames[*]}; do
-    ret="$(add_to_output "${ret}" "${dname}")"
-done
-dnames="$(find "${extra_dir}/docs" -name "*.py" -printf '%h\n' | sort -u)"
-for dname in ${dnames[*]}; do
-    ret="$(add_to_output "${ret}" "${dname}")"
-done
+if [ -d "${extra_dir}/tests" ]; then
+    dnames="$(find "${extra_dir}/tests" -name "*.py" -printf '%h\n' | sort -u)"
+    for dname in ${dnames[*]}; do
+        ret="$(add_to_output "${ret}" "${dname}")"
+    done
+fi
+if [ -d "${extra_dir}/docs" ]; then
+    dnames="$(find "${extra_dir}/docs" -name "*.py" -printf '%h\n' | sort -u)"
+    for dname in ${dnames[*]}; do
+        ret="$(add_to_output "${ret}" "${dname}")"
+    done
+fi
 echo "${ret}"
