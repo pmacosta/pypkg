@@ -1,0 +1,62 @@
+#!/bin/bash
+# make-links.sh
+# Copyright (c) 2013-2019 Pablo Acosta-Serafini
+# See LICENSE for details
+
+# Find directory where script is
+# from http://stackoverflow.com/questions/59895/
+# can-a-bash-script-tell-what-directory-its-stored-in)
+# BASH_SOURCE[0] is the pathname of the currently executing function or script
+# -h True if file exists and is a symbolic link
+# cd -P does not follow symbolic links
+current_dir() {
+    local sdir="$1"
+    local udir=""
+    # Resolve ${sdir} until the file is no longer a symlink
+    while [ -h "${sdir}" ]; do
+        udir="$(cd -P "$(dirname "${sdir}")" && pwd)"
+        sdir="$(readlink "${sdir}")"
+        # If ${sdir} was a relative symlink, we need to resolve it
+        # relative to the path where the symlink file was located
+        [[ "${sdir}" != /* ]] && sdir="${udir}/${sdir}"
+    done
+    udir="$(cd -P "$(dirname "${sdir}")" && pwd)"
+    echo "${udir}"
+}
+
+### Unofficial strict mode
+set -euo pipefail
+IFS=$'\n\t'
+#
+pkg_dir=$(dirname "$(current_dir "${BASH_SOURCE[0]}")")
+sbin_dir=${pkg_dir}/pypkg
+finish() { : ; }
+trap finish EXIT ERR SIGINT
+
+echo "pkg_dir: ${pkg_dir}"
+echo "sbin_dir: ${sbin_dir}"
+fnames=( \
+    .pre-commit-config.yaml \
+    .pydocstyle \
+    .pylintrc \
+    .hooks/pre-commit \
+    .hooks/setup-git-hooks.sh \
+    Makefile \
+    azure-pipelines.yml \
+    setup.py \
+    tox.ini \
+)
+for fname in ${fnames[*]}; do
+    echo "Copying ${fname}"
+    cp -f "${sbin_dir}/${fname}" "${pkg_dir}/${fname}"
+done
+fname=conf.py
+if [ -d "${pkg_dir}/docs" ]; then
+    echo "Copying ${fname}"
+    cp -f "${sbin_dir}/${fname}" "${pkg_dir}/docs/${fname}"
+fi
+fname=requirements_to_rst.py
+if [ -d "${pkg_dir}/docs/support" ]; then
+    echo "Copying ${fname}"
+    cp -f "${sbin_dir}/${fname}" "${pkg_dir}/docs/support/${fname}"
+fi
