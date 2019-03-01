@@ -28,7 +28,7 @@ current_dir() {
 set -euo pipefail
 IFS=$'\n\t'
 #
-pkg_dir=$(dirname "$(current_dir "${BASH_SOURCE[0]}")")
+pkg_dir=$(dirname "$(dirname "$(current_dir "${BASH_SOURCE[0]}")")")
 sbin_dir=${pkg_dir}/pypkg
 finish() { : ; }
 trap finish EXIT ERR SIGINT
