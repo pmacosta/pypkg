@@ -152,7 +152,13 @@ def get_pkg_desc():
 
 def get_pkg_name():
     """Return package name."""
-    return os.path.basename(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    stem = "pkgdata"
+    start_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    for (dirpath, _, fnames) in os.walk(start_dir):
+        for fname in fnames:
+            if os.path.splitext(os.path.basename(fname))[0] == stem:
+                return os.path.basename(dirpath)
+    raise RuntimeError("Package name could not be determied")
 
 
 def get_pkg_version():
