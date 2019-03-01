@@ -57,9 +57,15 @@ if [ -d "${pkg_dir}/docs" ]; then
     rm -rf "${pkg_dir}/docs/${fname}"
     cp "${sbin_dir}/${fname}" "${pkg_dir}/docs/${fname}"
 fi
-fname=requirements_to_rst.py
+fnames=( \
+    incfile.py \
+    requirements_to_rst.py \
+    term_echo.py \
+)
 if [ -d "${pkg_dir}/docs/support" ]; then
-    echo "Copying ${fname}"
-    rm -rf "${pkg_dir}/docs/support/${fname}"
-    cp "${sbin_dir}/${fname}" "${pkg_dir}/docs/support/${fname}"
+    for fname in ${fnames[*]}; do
+        echo "Copying ${fname}"
+        rm -rf "${pkg_dir}/docs/support/${fname}"
+        cp "${sbin_dir}/${fname}" "${pkg_dir}/docs/support/${fname}"
+    done
 fi
