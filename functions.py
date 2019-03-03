@@ -1,7 +1,7 @@
 # functions.py
 # Copyright (c) 2013-2019 Pablo Acosta-Serafini
 # See LICENSE for details
-# pylint: disable=C0111,E0401,E0602,E1111,R0904,R1717,R1718,W0201,W0621
+# pylint: disable=C0111,E0401,E0602,E1111,R0904,R1717,R1718,W0201,W0621,W0702
 
 # Standard library imports
 from __future__ import print_function
@@ -114,6 +114,17 @@ def gen_manifest(make_wheel=False):
             )
     with open(os.path.join(pkg_dir, "MANIFEST.in"), "w") as fobj:
         fobj.writelines("\n".join(ret))
+
+
+def get_entry_points():
+    """Return package entry points."""
+    sys.path.append(get_src_dir())
+    import pkgdata
+
+    try:
+        return pkgdata.ENTRY_POINTS
+    except:
+        return []
 
 
 def get_pkg_copyright_start():
