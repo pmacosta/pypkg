@@ -118,11 +118,12 @@ def gen_manifest(make_wheel=False):
 
 def get_coverage_exclude_files():
     """Return package entry points."""
+    pkg_name = get_pkg_name()
     sys.path.append(get_src_dir())
     import pkgdata
 
     try:
-        return pkgdata.COV_EXCLUDE_FILES
+        return [item.format(PKG_NAME=pkg_name) for item in pkgdata.COV_EXCLUDE_FILES]
     except:
         return []
 
