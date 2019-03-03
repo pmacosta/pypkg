@@ -124,7 +124,7 @@ def get_entry_points():
     try:
         return pkgdata.ENTRY_POINTS
     except:
-        return []
+        return None
 
 
 def get_pkg_copyright_start():
