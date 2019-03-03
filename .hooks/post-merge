@@ -33,6 +33,13 @@ pkg_dir=$(readlink -f "${sbin_dir}"/..)
 finish() { : ; }
 trap finish EXIT ERR SIGINT
 
+# Do not copy files if not a submodule
+if [ "$(basename "${sbin_dir}")" == "pypkg" ]; then
+    if [ -d "${sbin_dir}/.git" ]; then
+        exit 0
+    fi
+fi
+
 echo "pkg_dir: ${pkg_dir}"
 echo "sbin_dir: ${sbin_dir}"
 fnames=( \
