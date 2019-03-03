@@ -116,6 +116,17 @@ def gen_manifest(make_wheel=False):
         fobj.writelines("\n".join(ret))
 
 
+def get_coverage_exclude_files():
+    """Return package entry points."""
+    sys.path.append(get_src_dir())
+    import pkgdata
+
+    try:
+        return pkgdata.COV_EXCLUDE_FILES
+    except:
+        return []
+
+
 def get_entry_points():
     """Return package entry points."""
     sys.path.append(get_src_dir())

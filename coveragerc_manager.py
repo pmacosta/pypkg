@@ -2,12 +2,16 @@
 # coveragerc_manager.py
 # Copyright (c) 2013-2019 Pablo Acosta-Serafini
 # See LICENSE for details
-# pylint: disable=C0111
+# pylint: disable=C0111,C0413
 
 # Standard library imports
 from __future__ import print_function
 import os
 import sys
+
+# Intra-package imports
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+import functions
 
 
 ###
@@ -16,6 +20,7 @@ import sys
 def _exclude_files(sdir=None):
     ver = 3 if sys.hexversion < 0x03000000 else 2
     isf = ["conftest.py", "pkgdata.py", "compat{0}.py".format(ver)]
+    isf += functions.get_coverage_exclude_files()
     if sdir:
         isf = [os.path.join(sdir, item) for item in isf]
     return sorted(isf)
