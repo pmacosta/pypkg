@@ -149,15 +149,15 @@ jobs:
       mkdir -p ${RESULTS_DIR}/codecoverage
     displayName: Create directories
   - bash: |
+      "${REPO_DIR}"/pypkg/fix_windows_symlinks.py
+    displayName: Fix git Windows symbolic links
+    condition: eq( variables['Agent.OS'], 'Windows_NT' )
+  - bash: |
       python setup.py sdist --formats=zip
       export PKG_FILE="${PWD}/dist/${PKG_NAME}-${PKG_VERSION}.zip"
       cd "${PYTHON_SITE_PACKAGES}" || exit 1
       MERGE_REQUIREMENTS=1 pip install --upgrade "${PKG_FILE}"
     displayName: Install package
-  - bash: |
-      "${SBIN_DIR}"/fix_windows_symlinks.py
-    displayName: Fix git Windows symbolic links
-    condition: eq( variables['Agent.OS'], 'Windows_NT' )
   - bash: |
       echo "REPO_DIR=${REPO_DIR}"
       ls "${REPO_DIR}"
