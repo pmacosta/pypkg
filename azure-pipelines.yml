@@ -118,9 +118,6 @@ jobs:
       pip --version
       rm -rf get-pip.py
     displayName: Upgrade pip
-  - bash: |
-      pip install --upgrade codecov
-    displayName: Install codecov uploader
   - bash:
       sudo apt-get install hunspell shellcheck
     condition: eq( variables['Agent.OS'], 'Linux' )
@@ -251,16 +248,3 @@ jobs:
       codeCoverageTool: Cobertura
       summaryFileLocation: '$(RESULTS_DIR)/codecoverage/**/coverage.xml'
       reportDirectory: '$(RESULTS_DIR)/codecoverage/**/htmlcov'
-#  - bash: |
-#      if [ "${CODECOV_TOKEN}" != "" ] && [ -f "${RESULTS_DIR}"/codecoverage/coverage.xml ]; then
-#        cd "${REPO_DIR}" || exit 1
-#        cp "${RESULTS_DIR}"/codecoverage/coverage.xml "${REPO_DIR}"/.
-#        export DOT_SOURCE_DIR="${SOURCE_DIR//\//.}"
-#        export DOT_REPO_DIR="${REPO_DIR//\//.}"
-#        sed -r -i -e "s|${SOURCE_DIR}|${REPO_DIR}/${PKG_NAME}|g" coverage.xml
-#        sed -r -i -e "s|${DOT_SOURCE_DIR}|${DOT_REPO_DIR}.${PKG_NAME}|g" coverage.xml
-#        codecov --token="${CODECOV_TOKEN}" --file="${REPO_DIR}"/coverage.xml
-#      fi
-#    env:
-#        CODECOV_TOKEN: $(codecovToken)
-#    displayName: Upload code coverage results
