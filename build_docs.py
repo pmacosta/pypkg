@@ -50,7 +50,7 @@ except ImportError:
 # Global variables
 ###
 VALID_MODULES = [functions.get_pkg_name()]
-PKG_SUBMODULES = []
+PKG_SUBMODULES = functions.get_pkg_submodules()
 
 
 ###
@@ -117,9 +117,6 @@ def build_pkg_docs(args):
     retcode = 0
     pkg_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     src_dir = args.directory
-    cog_exe = which("cog.py")
-    if not cog_exe:
-        raise RuntimeError("cog binary could not be found")
     os.environ["NOPTION"] = "-n {0}".format(args.num_cpus) if args.num_cpus > 1 else ""
     rebuild = args.rebuild
     test = args.test
@@ -132,27 +129,29 @@ def build_pkg_docs(args):
         print("Python: {0}".format(sys.executable))
         print("PATH: {0}".format(os.environ["PATH"]))
         print("PYTHONPATH: {0}".format(os.environ["PYTHONPATH"]))
-        print("Cog: {0}".format(cog_exe))
         print("functions: {0}".format(functions.__file__))
-        print(
-            "functions.subprocess: {0}".format(functions.subprocess.__file__)
-        )
+        print("functions.subprocess: {0}".format(functions.subprocess.__file__))
     if rebuild or test:
-        refresh_moddb()
-        print_cyan(
-            "Rebuilding exceptions documentation{0}".format(
-                " (test mode)" if test else ""
+        if not PKG_SUBMODULES:
+            print("No submodules defined, skipping exception documentation rebuilding")
+        else:
+            refresh_moddb()
+            print_cyan(
+                "Rebuilding exceptions documentation{0}".format(
+                    " (test mode)" if test else ""
+                )
             )
-        )
-        start_time = datetime.datetime.today()
-        tmp_retcode = rebuild_module_doc(test, src_dir, tracer_dir, cog_exe, debug)
-        retcode = tmp_retcode if not retcode else retcode
-        stop_time = datetime.datetime.today()
-        print("Elapsed time: {0}".format(elapsed_time_string(start_time, stop_time)))
-        build_moddb()
+            start_time = datetime.datetime.today()
+            tmp_retcode = rebuild_module_doc(test, src_dir, tracer_dir)
+            retcode = tmp_retcode if not retcode else retcode
+            stop_time = datetime.datetime.today()
+            print(
+                "Elapsed time: {0}".format(elapsed_time_string(start_time, stop_time))
+            )
+            build_moddb()
     generate_top_level_readme(pkg_dir)
     print("Inserting files into docstrings")
-    insert_files_in_rsts(pkg_dir, cog_exe)
+    insert_files_in_rsts(pkg_dir)
     print("Generating HTML output")
     shutil.rmtree(os.path.join(pkg_dir, "docs", "_build"), ignore_errors=True)
     cwd = os.getcwd()
@@ -249,7 +248,7 @@ def elapsed_time_string(start_time, stop_time):
     return (", ".join(ret_list[0:-1])) + " and " + ret_list[-1]
 
 
-def insert_files_in_rsts(pkg_dir, cog_exe):
+def insert_files_in_rsts(pkg_dir):
     """Cog-insert source files in Sphinx files."""
     fnames = [
         os.path.join(pkg_dir, "docs", "README.rst"),
@@ -258,13 +257,13 @@ def insert_files_in_rsts(pkg_dir, cog_exe):
     print("Inserting source files in documentation files")
     for fname in fnames:
         print("   Processing file {0}".format(fname))
-        retcode = Cog().main([cog_exe, "-e", "-x", "-o", fname + ".tmp", fname])
+        retcode = Cog().main(["cog.py", "-e", "-x", "-o", fname + ".tmp", fname])
         if retcode:
             raise RuntimeError(
                 "Error deleting insertion of source files in "
                 "documentation file {0}".format(fname)
             )
-        retcode = Cog().main([cog_exe, "-e", "-o", fname + ".tmp", fname])
+        retcode = Cog().main(["cog.py", "-e", "-o", fname + ".tmp", fname])
         if retcode:
             raise RuntimeError(
                 "Error inserting source files in "
@@ -361,7 +360,7 @@ def print_red(text):
     print(pcolor(text, "red"))
 
 
-def rebuild_module_doc(test, src_dir, tracer_dir, cog_exe, debug):  # noqa
+def rebuild_module_doc(test, src_dir, tracer_dir):  # noqa
     # pylint: disable=R0913
     retcode = 0
     pkl_dir = tracer_dir
@@ -373,11 +372,11 @@ def rebuild_module_doc(test, src_dir, tracer_dir, cog_exe, debug):  # noqa
         orig_file = smf + ".orig"
         if test:
             shutil.copy(smf, orig_file)
-        stdout = functions.shcmd(
-            [sys.executable, cog_exe, "-e", "-o", smf + ".tmp", smf],
-            ("Error generating exceptions documentation " "in module {0}".format(smf)),
-            async_stdout=debug,
-        )
+        retcode = Cog().main(["cog.py", "-e", "-o", smf + ".tmp", smf])
+        if retcode:
+            raise RuntimeError(
+                "Error generating exceptions documentation in module {0}".format(smf)
+            )
         move_file(smf + ".tmp", smf)
         if test:
             diff_list = diff(smf, orig_file)
@@ -392,7 +391,6 @@ def rebuild_module_doc(test, src_dir, tracer_dir, cog_exe, debug):  # noqa
                 retcode = 1
             move_file(orig_file, smf)
         else:
-            print(stdout)
             del_file(pkl_file)
     return retcode
 
@@ -587,21 +585,6 @@ def valid_num_cpus(value):
             "available CPUs ({1})".format(value, max_cpus)
         )
     return value
-
-
-def which(name):
-    """Search PATH for executable files with the given name."""
-    # Inspired by https://twistedmatrix.com/trac/browser/tags/releases/
-    # twisted-8.2.0/twisted/python/procutils.py
-    result = []
-    path = os.environ.get("PATH", None)
-    if path is None:
-        return []
-    for pdir in os.environ.get("PATH", "").split(os.pathsep):
-        fname = os.path.join(pdir, name)
-        if os.path.isfile(fname) and os.access(fname, os.X_OK):
-            result.append(fname)
-    return result[0] if result else None
 
 
 if __name__ == "__main__":

@@ -188,6 +188,17 @@ def get_pkg_name():
     return os.path.basename(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
+def get_pkg_submodules():
+    """Return package submodules."""
+    sys.path.append(get_src_dir())
+    import pkgdata
+
+    try:
+        return pkgdata.PKG_SUBMODULES
+    except:
+        return []
+
+
 def get_pkg_version():
     """Return supported Python interpreter versions."""
     sys.path.append(get_src_dir())
