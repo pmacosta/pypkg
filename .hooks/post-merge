@@ -23,6 +23,15 @@ current_dir() {
     udir="$(cd -P "$(dirname "${sdir}")" && pwd)"
     echo "${udir}"
 }
+copy_file() {
+    local sbin_dir sdir fname
+    sbin_dir=$1
+    sdir=$2
+    fname=$3
+    echo "Copying ${fname}"
+    rm -rf "${sdir}/${fname:?}"
+    cp "${sbin_dir}/${fname}" "${sdir}/${fname}"
+}
 
 ### Unofficial strict mode
 set -euo pipefail
@@ -42,6 +51,7 @@ fi
 
 echo "pkg_dir: ${pkg_dir}"
 echo "sbin_dir: ${sbin_dir}"
+sdir="${pkg_dir}"
 fnames=( \
     .pre-commit-config.yaml \
     .pydocstyle \
@@ -54,9 +64,7 @@ fnames=( \
     tox.ini \
 )
 for fname in ${fnames[*]}; do
-    echo "Copying ${fname}"
-    rm -rf "${pkg_dir}/${fname:?}"
-    cp "${sbin_dir}/${fname}" "${pkg_dir}/${fname}"
+    copy_file "${sbin_dir}" "${sdir}" "${fname}"
 done
 if [ -d "${pkg_dir}/tests" ]; then
     fnames=( \
@@ -64,36 +72,39 @@ if [ -d "${pkg_dir}/tests" ]; then
         tox.ini \
     )
     for fname in ${fnames[*]}; do
-        echo "Copying ${fname}"
-        rm -rf "${pkg_dir}/${fname:?}"
-        cp "${sbin_dir}/${fname}" "${pkg_dir}/${fname}"
+        copy_file "${sbin_dir}" "${sdir}" "${fname}"
     done
     if which cog.py &> /dev/null; then
         fname=tox.ini
-        if ! cog.py -o tmp.ini "${pkg_dir}/${fname}"; then
+        if ! cog.py -o tmp.ini "${sdir}/${fname}"; then
             rm -rf tmp.ini
-            cp "${sbin_dir}/${fname}" "${pkg_dir}/${fname}"
+            copy_file "${sbin_dir}" "${sdir}" "${fname}"
         else
-            mv -f tmp.ini "${pkg_dir}/${fname}"
+            mv -f tmp.ini "${sdir}/${fname}"
         fi
+    fi
+    if [ -d "${pkg_dir}/docs/support" ]; then
+        sdir="${pkg_dir}/tests"
+        fname=conftest.py
+        copy_file "${sbin_dir}" "${sdir}" "${fname}"
     fi
 fi
 
+sdir="${pkg_dir}/docs"
 fname=conf.py
-if [ -d "${pkg_dir}/docs" ]; then
-    echo "Copying ${fname}"
-    rm -rf "${pkg_dir}/docs/${fname}"
-    cp "${sbin_dir}/${fname}" "${pkg_dir}/docs/${fname}"
+if [ -d "${sdir}" ]; then
+    copy_file "${sbin_dir}" "${sdir}" "${fname}"
 fi
+
+sdir="${pkg_dir}/docs/support"
 fnames=( \
     incfile.py \
     requirements_to_rst.py \
     term_echo.py \
+    trace_support.py \
 )
-if [ -d "${pkg_dir}/docs/support" ]; then
+if [ -d "${sdir}" ]; then
     for fname in ${fnames[*]}; do
-        echo "Copying ${fname}"
-        rm -rf "${pkg_dir}/docs/support/${fname}"
-        cp "${sbin_dir}/${fname}" "${pkg_dir}/docs/support/${fname}"
+        copy_file "${sbin_dir}" "${sdir}" "${fname}"
     done
 fi

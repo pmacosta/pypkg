@@ -1,4 +1,4 @@
-personal_ws-1.1 en 1768 utf-8
+personal_ws-1.1 en 1771 utf-8
 a4paper
 aa
 aaa
@@ -511,6 +511,7 @@ FileName
 FileNameExists
 filenames
 fillvalue
+filterwarnings
 FinalClass
 finterp
 FIve
@@ -1112,6 +1113,7 @@ permalinks
 peru
 peta
 pexceptions
+pexdoc
 pexlist
 pflag
 pformat
@@ -1220,6 +1222,7 @@ pyplot
 pysix
 pytest
 Pytest
+PytestWarning
 pytho
 python3
 PYTHONHASHSEED
