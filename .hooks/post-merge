@@ -76,3 +76,11 @@ if [ -d "${pkg_dir}/docs/support" ]; then
         cp "${sbin_dir}/${fname}" "${pkg_dir}/docs/support/${fname}"
     done
 fi
+if which cog.py &> /dev/null; then
+    if ! cog.py -o tmp.ini "${pkg_dir}/tox.ini"; then
+        rm -rf tmp.ini
+        cp "${sbin_dir}/${fname}" "${pkg_dir}/${fname}"
+    else
+        mv -f tmp.ini "${pkg_dir}/tox.ini"
+    fi
+fi
