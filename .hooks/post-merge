@@ -49,8 +49,8 @@ fnames=( \
     .hooks/pre-commit \
     .hooks/setup-git-hooks.sh \
     Makefile \
-    azure-pipelines.yml \
     setup.py \
+    azure-pipelines.yml \
     tox.ini \
 )
 for fname in ${fnames[*]}; do
@@ -58,6 +58,27 @@ for fname in ${fnames[*]}; do
     rm -rf "${pkg_dir}/${fname:?}"
     cp "${sbin_dir}/${fname}" "${pkg_dir}/${fname}"
 done
+if [ -d "${pkg_dir}/tests" ]; then
+    fnames=( \
+        azure-pipelines.yml \
+        tox.ini \
+    )
+    for fname in ${fnames[*]}; do
+        echo "Copying ${fname}"
+        rm -rf "${pkg_dir}/${fname:?}"
+        cp "${sbin_dir}/${fname}" "${pkg_dir}/${fname}"
+    done
+    if which cog.py &> /dev/null; then
+        fname=tox.ini
+        if ! cog.py -o tmp.ini "${pkg_dir}/${fname}"; then
+            rm -rf tmp.ini
+            cp "${sbin_dir}/${fname}" "${pkg_dir}/${fname}"
+        else
+            mv -f tmp.ini "${pkg_dir}/${fname}"
+        fi
+    fi
+fi
+
 fname=conf.py
 if [ -d "${pkg_dir}/docs" ]; then
     echo "Copying ${fname}"
@@ -75,13 +96,4 @@ if [ -d "${pkg_dir}/docs/support" ]; then
         rm -rf "${pkg_dir}/docs/support/${fname}"
         cp "${sbin_dir}/${fname}" "${pkg_dir}/docs/support/${fname}"
     done
-fi
-if which cog.py &> /dev/null; then
-    fname=tox.ini
-    if ! cog.py -o tmp.ini "${pkg_dir}/${fname}"; then
-        rm -rf tmp.ini
-        cp "${sbin_dir}/${fname}" "${pkg_dir}/${fname}"
-    else
-        mv -f tmp.ini "${pkg_dir}/${fname}"
-    fi
 fi
