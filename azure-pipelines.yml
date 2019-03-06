@@ -195,32 +195,13 @@ jobs:
       export PYTHONPATH="${PYTHONPATH}:${PYLINT_PLUGINS_DIR}"
       export PYTHONPATH="$("${SBIN_DIR}"/winnorm_path.py "${PYTHONPATH}")"
       export DICPATH="${PYLINT_PLUGINS_DIR}/dicts"
+      export PYLINT_FILES="$("${SBIN_DIR}"/get-pylint-files.sh "${PKG_NAME}" "${REPO_DIR}" "${SOURCE_DIR}" "${EXTRA_DIR}")"
       echo "PYLINT_PLUGINS_DIR=${PYLINT_PLUGINS_DIR}"
       echo "PYLINT_PLUGINS_LIST=${PYLINT_PLUGINS_LIST}"
       echo "PYLINT_CLI_APPEND=${PYLINT_CLI_APPEND}"
       echo "LANG=${LANG}"
       echo "DICPATH=${DICPATH}"
-      # Check
-      if ls "${REPO_DIR}"/*.py &> /dev/null; then
-        echo "Checking base directory"
-        pylint --rcfile="${EXTRA_DIR}/.pylintrc" "${PYLINT_CLI_APPEND}" --output-format=colorized --reports=no --score=no "${REPO_DIR}"/*.py || exit 1
-      fi
-      if ls "${SOURCE_DIR}"/*.py &> /dev/null; then
-        echo "Checking source directory"
-        pylint --rcfile="${EXTRA_DIR}/.pylintrc" "${PYLINT_CLI_APPEND}" --output-format=colorized --reports=no --score=no "${SOURCE_DIR}"/*.py || exit 1
-      fi
-      if ls "${EXTRA_DIR}"/tests/*.py &> /dev/null; then
-        echo "Checking tests base directory"
-        pylint --rcfile="${EXTRA_DIR}/.pylintrc" "${PYLINT_CLI_APPEND}" --output-format=colorized --reports=no --score=no "${EXTRA_DIR}"/tests/*.py || exit 1
-      fi
-      if ls "${EXTRA_DIR}"/tests/support/*.py &> /dev/null; then
-        echo "Checking tests support directory"
-        pylint --rcfile="${EXTRA_DIR}/.pylintrc" "${PYLINT_CLI_APPEND}" --output-format=colorized --reports=no --score=no "${EXTRA_DIR}"/tests/support/*.py || exit 1
-      fi
-      if ls "${EXTRA_DIR}"/docs/support/*.py &> /dev/null; then
-        echo "Checking documentation support directory"
-        pylint --rcfile="${EXTRA_DIR}/.pylintrc" "${PYLINT_CLI_APPEND}" --output-format=colorized --reports=no --score=no "${EXTRA_DIR}"/docs/support/*.py || exit 1
-      fi
+      pylint --rcfile="${EXTRA_DIR}/.pylintrc" "${PYLINT_CLI_APPEND}" --output-format=colorized --reports=no --score=no "${PYLINT_FILES}" || exit 1
       echo "##vso[task.setvariable variable=PYTHONPATH]$PYTHONPATH"
     displayName: Check code standards compliance
   - bash: |
