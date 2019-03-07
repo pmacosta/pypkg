@@ -205,6 +205,10 @@ jobs:
       else
         export PYLINT_FILES="$("${SBIN_DIR}"/get_pylint_files.py -r "${REPO_DIR}" -s "${SOURCE_DIR}" -e "${EXTRA_DIR}")"
       fi
+      echo "Files to lint"
+      for fname in ${PYLINT_FILES}; do
+        echo "${fname}"
+      done
       pylint --rcfile="${REPO_DIR}/.pylintrc" "${PYLINT_CLI_APPEND}" --output-format=colorized --reports=no --score=no ${PYLINT_FILES} || exit 1
     displayName: Check code standards compliance
   - bash: |
