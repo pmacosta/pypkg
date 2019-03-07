@@ -1,4 +1,4 @@
-personal_ws-1.1 en 1771 utf-8
+personal_ws-1.1 en 1773 utf-8
 a4paper
 aa
 aaa
@@ -177,6 +177,7 @@ ClassWithPropertyDefinedViaDecorators
 ClassWithPropertyDefinedViaFunction
 ClassWithPropertyDefinedViaLambdaAndEnclosure
 CLDICTS
+cli
 CLI
 clist
 ClosureClass
@@ -797,6 +798,7 @@ LINREG
 linregress
 linspace
 linter
+linting
 lintshell
 LintShell
 LintShellBuilder
