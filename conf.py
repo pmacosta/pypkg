@@ -405,6 +405,7 @@ if RTD:
     # Mock out numpy, matplotlib and scipy modules which are not installed
     # in ReadTheDocs environment
     MOCK_MODULES = [
+        "np",
         "numpy",
         "matplotlib",
         "matplotlib.pyplot",
