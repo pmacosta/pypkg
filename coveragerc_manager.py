@@ -2,10 +2,11 @@
 # coveragerc_manager.py
 # Copyright (c) 2013-2019 Pablo Acosta-Serafini
 # See LICENSE for details
-# pylint: disable=C0111,C0413
+# pylint: disable=C0111,C0413,W0403
 
 # Standard library imports
 from __future__ import print_function
+import datetime
 import os
 import sys
 
@@ -174,9 +175,10 @@ def main(argv):
                 print("".join(fobj.readlines()))
         # Generate conftest.py files to selectively
         # skip Python 2 or Python 3 files
+        year = datetime.datetime.now().year
         skip_file = (
             "# conftest.py\n"
-            "# Copyright (c) 2013-2019 Pablo Acosta-Serafini\n"
+            "# Copyright (c) 2013-" + str(year) + " Pablo Acosta-Serafini\n"
             "# See LICENSE for details\n"
             "# pylint: disable=C0103,C0111,C0411,E0012\n"
             "import sys\n"
