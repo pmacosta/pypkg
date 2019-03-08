@@ -244,10 +244,13 @@ jobs:
         pytest --doctest-modules "${SOURCE_DIR}" || exit 1
       fi
       pytest --junitxml="${RESULTS_DIR}"/testresults/test-results.xml --cov-config="${COV_FILE}" --cov="${SOURCE_DIR}" --cov-report=xml --cov-report=html
+    displayName: Unit tests
+  - bash: |
+      export PYTHONPATH="$("${SBIN_DIR}"/winnorm_path.py "${PYTHONPATH}")"
       if [ -f "${SBIN_DIR}"/build_docs.py ]; then
           "${SBIN_DIR}"/build_docs.py -r -t -d "$("${SBIN_DIR}"//winnorm_path.py "${SOURCE_DIR}")" || exit 1
       fi
-    displayName: Unit tests
+    displayName: Documentation rebuild test
   - task: PublishTestResults@2
     condition: succeededOrFailed()
     inputs:
