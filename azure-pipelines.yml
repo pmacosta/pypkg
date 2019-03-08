@@ -169,6 +169,7 @@ jobs:
       if [ -d "${EXTRA_DIR}/data" ]; then
         echo "EXTRA_DIR/data=${EXTRA_DIR}/data"
         ls "${EXTRA_DIR}/data"
+      fi
       if [ -d "${EXTRA_DIR}/tests" ]; then
         echo "EXTRA_DIR/tests=${EXTRA_DIR}/tests"
         ls "${EXTRA_DIR}/tests"
