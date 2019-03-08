@@ -166,6 +166,9 @@ jobs:
         echo "SBIN_DIR=${SBIN_DIR}"
         ls "${SBIN_DIR}"
       fi
+      if [ -d "${EXTRA_DIR}/data" ]; then
+        echo "EXTRA_DIR/data=${EXTRA_DIR}/data"
+        ls "${EXTRA_DIR}/data"
       if [ -d "${EXTRA_DIR}/tests" ]; then
         echo "EXTRA_DIR/tests=${EXTRA_DIR}/tests"
         ls "${EXTRA_DIR}/tests"
