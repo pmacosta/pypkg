@@ -414,6 +414,8 @@ if RTD:
         "matplotlib.backends.backend_agg",
         "matplotlib.text",
         "matplotlib.transforms",
+        "mpl",
+        "plt",
         "scipy",
         "scipy.stats",
         "scipy.interpolate",
