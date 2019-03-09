@@ -39,6 +39,7 @@ IFS=$'\n\t'
 #
 sbin_dir=$(git rev-parse --show-toplevel)
 pkg_dir=$(readlink -f "${sbin_dir}"/..)
+data_dir="${pkg_dir}"/data
 finish() { : ; }
 trap finish EXIT ERR SIGINT
 
@@ -101,10 +102,16 @@ fnames=( \
     incfile.py \
     requirements_to_rst.py \
     term_echo.py \
-    trace_support.py \
 )
 if [ -d "${sdir}" ]; then
     for fname in ${fnames[*]}; do
         copy_file "${sbin_dir}" "${sdir}" "${fname}"
     done
+fi
+
+fname=trace_support.py
+if [ -f "${data_dir}/requirements.json" ]; then
+    if grep --quiet pexdoc "${data_dir}/requirements.json"; then
+        copy_file "${sbin_dir}" "${sdir}" "${fname}"
+    fi
 fi
