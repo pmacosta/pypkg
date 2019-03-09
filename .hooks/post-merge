@@ -61,8 +61,6 @@ fnames=( \
     .hooks/setup-git-hooks.sh \
     Makefile \
     setup.py \
-    azure-pipelines.yml \
-    tox.ini \
 )
 for fname in ${fnames[*]}; do
     copy_file "${sbin_dir}" "${sdir}" "${fname}"
@@ -85,9 +83,11 @@ if [ -d "${pkg_dir}/tests" ]; then
         fi
     fi
     if [ -d "${pkg_dir}/docs/support" ]; then
-        sdir="${pkg_dir}/tests"
-        fname=conftest.py
-        copy_file "${sbin_dir}" "${sdir}" "${fname}"
+        if grep --quiet pexdoc "${data_dir}/requirements.json"; then
+            sdir="${pkg_dir}/tests"
+            fname=conftest.py
+            copy_file "${sbin_dir}" "${sdir}" "${fname}"
+        fi
     fi
 fi
 
