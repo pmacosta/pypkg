@@ -467,8 +467,8 @@ def generate_top_level_readme(pkg_dir):
             if line.lstrip().startswith(":lines:"):
                 literalinclude = False
                 lrange = line.lstrip().replace(":lines:", "").strip()
-                extra_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-                mdir = os.path.abspath(os.path.join(extra_dir, "docs", "support"))
+                extra_dir = "."
+                mdir = os.path.join(extra_dir, "docs", "support")
                 tstr = (
                     ".. import sys\n"
                     ".. sys.path.append('" + extra_dir + "')\n"
