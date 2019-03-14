@@ -271,7 +271,3 @@ jobs:
       codeCoverageTool: Cobertura
       summaryFileLocation: '$(RESULTS_DIR)/codecoverage/**/coverage.xml'
       reportDirectory: '$(RESULTS_DIR)/codecoverage/**/htmlcov'
-  - task: PublishPipelineArtifact@0
-    inputs:
-      artifactName: 'Build artifacts'
-      targetPath: '$(ARTIFACTS_DIR)'
