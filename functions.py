@@ -219,6 +219,16 @@ def get_src_dir():
     src_dir = os.path.join(tdir, pkg_name)
     if os.path.exists(os.path.join(src_dir, "pkgdata.py")):
         return src_dir
+    backend = "Agg"
+    try:
+        import matplotlib
+
+        matplotlib.rcParams["backend"] = backend
+        import matplotlib as mpl
+
+        mpl.rcParams["backend"] = backend
+    except ImportError:
+        pass
     __import__(pkg_name)
     src_dir = os.path.dirname(os.path.abspath(sys.modules[pkg_name].__file__))
     if os.path.exists(src_dir):
