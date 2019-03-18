@@ -54,6 +54,8 @@ def main(argv):
     pkg_name = os.path.basename(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     )
+    if "-" in pkg_name:
+        pkg_name = pkg_name.split("-")[0]
     print("File: {0}".format(os.path.abspath(__file__)))
     # Unpack command line arguments
     print("Coverage manager")
