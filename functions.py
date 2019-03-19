@@ -166,11 +166,22 @@ def get_pkg_data_files(share_dir):
 
 
 def get_pkg_desc():
-    """Return supported Python interpreter versions."""
+    """Return short package description."""
     sys.path.append(get_src_dir())
     import pkgdata
 
     return pkgdata.PKG_DESC
+
+
+def get_pkg_long_desc():
+    """Return long package description."""
+    sys.path.append(get_src_dir())
+    import pkgdata
+
+    try:
+        return pkgdata.PKG_LONG_DESC
+    except:
+        return ""
 
 
 def get_pkg_name():
