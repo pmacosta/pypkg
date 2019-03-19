@@ -24,7 +24,7 @@ current_dir() {
     echo "${udir}"
 }
 copy_file() {
-    local sbin_dir sdir fname
+    local sbin_dir sdir fname fname_out
     sbin_dir=$1
     sdir=$2
     fname=$3
@@ -104,7 +104,7 @@ if [ -d "${sdir}" ]; then
     copy_file "${sbin_dir}" "${sdir}" "${fname}"
     fname_in=Makefile.docs
     fname_out=Makefile
-    copy_file "${sbin_dir}" "${sdir}" "${fname_in}" "${fname_in}"
+    copy_file "${sbin_dir}" "${sdir}" "${fname_in}" "${fname_out}"
 fi
 
 sdir="${pkg_dir}/docs/support"
