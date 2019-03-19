@@ -28,9 +28,16 @@ copy_file() {
     sbin_dir=$1
     sdir=$2
     fname=$3
-    echo "Copying ${fname}"
-    rm -rf "${sdir}/${fname:?}"
-    cp "${sbin_dir}/${fname}" "${sdir}/${fname}"
+    if [ "$#" -eq 4 ]; then
+        fname_out=$4
+        echo "Copying ${fname} as ${fname_out}"
+        rm -rf "${sdir}/${fname_out:?}"
+        cp "${sbin_dir}/${fname}" "${sdir}/${fname_out}"
+    else
+        echo "Copying ${fname}"
+        rm -rf "${sdir}/${fname:?}"
+        cp "${sbin_dir}/${fname}" "${sdir}/${fname}"
+    fi
 }
 
 ### Unofficial strict mode
@@ -92,9 +99,12 @@ if [ -d "${pkg_dir}/tests" ]; then
 fi
 
 sdir="${pkg_dir}/docs"
-fname=conf.py
 if [ -d "${sdir}" ]; then
+    fname=conf.py
     copy_file "${sbin_dir}" "${sdir}" "${fname}"
+    fname_in=Makefile.docs
+    fname_out=Makefile
+    copy_file "${sbin_dir}" "${sdir}" "${fname_in}" "${fname_in}"
 fi
 
 sdir="${pkg_dir}/docs/support"
