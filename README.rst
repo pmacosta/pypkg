@@ -56,7 +56,7 @@
 .. cog.outl("")
 .. cog.outl(".. image::")
 .. cog.outl("    https://img.shields.io/azure-devops/coverage/pmasdev/"+PKG_NAME+"/"+PKG_PIPELINE_ID+".svg")
-.. cog.outl("    :target: https://dev.azure.com/pmasdev/"+PKG_NAME+"/_build?definitionId=3&_a=summary")
+.. cog.outl("    :target: https://dev.azure.com/pmasdev/"+PKG_NAME+"/_build?definitionId="+PKG_PIPELINE_ID+"&_a=summary")
 .. cog.outl("    :alt: Continuous integration test coverage")
 .. cog.outl("")
 .. cog.outl(".. image::")
