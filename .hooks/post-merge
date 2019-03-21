@@ -39,7 +39,21 @@ copy_file() {
         cp "${sbin_dir}/${fname}" "${sdir}/${fname}"
     fi
 }
-
+cog_file() {
+    local sdir fname sbin_dir tmp_fname
+    sdir=$1
+    sbin_dir=$2
+    fname=$3
+    tmp_fname=$(mktemp)
+    if which cog.py &> /dev/null; then
+        if ! cog.py -o "${tmp_fname}" "${sdir}/${fname}"; then
+            rm -rf "${tmp_fname}"
+            copy_file "${sbin_dir}" "${sdir}" "${fname}"
+        else
+            mv -f "${tmp_fname}" "${sdir}/${fname}"
+        fi
+    fi
+}
 ### Unofficial strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -80,15 +94,7 @@ if [ -d "${pkg_dir}/tests" ]; then
     for fname in ${fnames[*]}; do
         copy_file "${sbin_dir}" "${sdir}" "${fname}"
     done
-    if which cog.py &> /dev/null; then
-        fname=tox.ini
-        if ! cog.py -o tmp.ini "${sdir}/${fname}"; then
-            rm -rf tmp.ini
-            copy_file "${sbin_dir}" "${sdir}" "${fname}"
-        else
-            mv -f tmp.ini "${sdir}/${fname}"
-        fi
-    fi
+    cog_file "${sdir}" "${sbin_dir}" tox.ini
     if [ -d "${pkg_dir}/docs/support" ]; then
         if grep --quiet pexdoc "${data_dir}/requirements.json"; then
             sdir="${pkg_dir}/tests"
@@ -100,8 +106,14 @@ fi
 
 sdir="${pkg_dir}/docs"
 if [ -d "${sdir}" ]; then
-    fname=conf.py
-    copy_file "${sbin_dir}" "${sdir}" "${fname}"
+    fnames=( \
+        conf.py \
+        README.rst \
+    )
+    for fname in ${fnames[*]}; do
+        copy_file "${sbin_dir}" "${sdir}" "${fname}"
+    done
+    cog_file "${sdir}" "${sbin_dir}" README.rst
     fname_in=Makefile.docs
     fname_out=Makefile
     copy_file "${sbin_dir}" "${sdir}" "${fname_in}" "${fname_out}"
