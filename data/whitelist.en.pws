@@ -1,4 +1,4 @@
-personal_ws-1.1 en 1801 utf-8
+personal_ws-1.1 en 1802 utf-8
 a4paper
 aa
 aaa
@@ -1149,6 +1149,7 @@ pindex
 pinspect
 pipcmd
 pipefail
+PIPELINE
 pkgdata
 pkgdir
 pkgname
