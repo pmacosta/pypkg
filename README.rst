@@ -77,8 +77,10 @@
 .. cog.outl("")
 .. cog.outl("")
 .. for paragraph in PKG_LONG_DESC.split(os.linesep):
-..     wrap(paragraph)
-..     cog.outl("")
+..     if paragraph.strip():
+..         wrap(paragraph)
+..     else:
+..         cog.outl("")
 .. cog.outl("Interpreter")
 .. cog.outl("===========")
 .. cog.outl("")
