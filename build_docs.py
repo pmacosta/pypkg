@@ -152,6 +152,7 @@ def build_pkg_docs(args):
     generate_top_level_readme(pkg_dir)
     print("Inserting files into docstrings")
     insert_files_in_rsts(pkg_dir)
+    cleanup(pkg_dir)
     print("Generating HTML output")
     shutil.rmtree(os.path.join(pkg_dir, "docs", "_build"), ignore_errors=True)
     cwd = os.getcwd()
@@ -177,6 +178,30 @@ def build_pkg_docs(args):
     # shutil.copytree(src_dir, dest_dir)
     os.chdir(cwd)
     return retcode
+
+
+def cleanup(pkg_dir):
+    """Remove necessary blocks and multiple blank lines."""
+    fname = os.path.join(pkg_dir, "README.rst")
+    with open(fname, "r") as fobj:
+        lines = [item.rstrip() for item in fobj.readlines()]
+    remove_block = False
+    prev_line = "Start"
+    out_lines = []
+    for line in lines:
+        if line.lstrip().startswith(".. [REMOVE STOP]"):
+            remove_block = False
+        elif remove_block:
+            continue
+        elif line.lstrip().startswith(".. [REMOVE START]"):
+            remove_block = True
+        elif line or ((not line) and prev_line):
+            out_lines.append(line)
+            prev_line = line.strip()
+    with open(fname, "w") as fobj:
+        fobj.write("\n".join(out_lines))
+    # Check that generated file produces HTML version without errors
+    rst2html(os.path.normpath(fname))
 
 
 def copy_file(src, dest):
@@ -250,10 +275,7 @@ def elapsed_time_string(start_time, stop_time):
 
 def insert_files_in_rsts(pkg_dir):
     """Cog-insert source files in Sphinx files."""
-    fnames = [
-        os.path.join(pkg_dir, "docs", "README.rst"),
-        os.path.join(pkg_dir, "README.rst"),
-    ]
+    fnames = [os.path.join(pkg_dir, "README.rst")]
     print("Inserting source files in documentation files")
     for fname in fnames:
         print("   Processing file {0}".format(fname))
@@ -473,18 +495,22 @@ def generate_top_level_readme(pkg_dir):
                     ".. import sys\n"
                     ".. sys.path.append('" + extra_dir + "')\n"
                     ".. import pypkg.incfile\n"
+                    ".. cog.outl('.. [REMOVE STOP]')\n"
                     ".. pypkg.incfile.incfile(\n"
                     '..     "{0}",\n'
                     "..     cog.out,\n"
                     '..     "{1}",\n'
                     '..     "' + mdir + '"\n'
-                    ".. )"
+                    ".. )\n"
+                    ".. cog.outl('.. [REMOVE START]')"
                 )
+                ret.append(".. [REMOVE START]")
                 ret.append(".. [[[cog")
                 ret.append(".. import " + pkg_name)
                 ret.append(tstr.format(os.path.basename(fname), lrange))
                 ret.append(".. ]]]")
                 ret.append(".. [[[end]]]")
+                ret.append(".. [REMOVE STOP]")
         elif match1:
             # Remove cross-references
             label = match1.group(1)
