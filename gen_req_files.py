@@ -82,7 +82,7 @@ def gen_req_files(freeze_ver=False):
                     raise RuntimeError(
                         (
                             "Multi-interpreter versions does not"
-                            "include Python 2.7for category {0}".format(cat)
+                            "include Python 2.7 for category {0}".format(cat)
                         )
                     )
                 elif not isinstance(pkg_dict["ver"], str):
