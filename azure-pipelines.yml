@@ -151,6 +151,7 @@ jobs:
       curl https://storage.googleapis.com/shellcheck/shellcheck-stable.linux.x86_64.tar.xz -o shellcheck.tar.xz
       tar xf shellcheck.tar.xz
       export PATH="${PWD}/shellcheck-stable:${PATH}"
+      pip install --upgrade cyhunspell
       echo "##vso[task.setvariable variable=PATH]$PATH"
     condition: eq( variables['Agent.OS'], 'Linux' )
     displayName: Install hunspell and shellcheck (Linux)
