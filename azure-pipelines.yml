@@ -101,6 +101,7 @@ jobs:
       export PYTHONPATH=${PYTHONPATH}:${SBIN_DIR}:${EXTRA_DIR}:${EXTRA_DIR}/tests:${EXTRA_DIR}/docs:${EXTRA_DIR}/docs/support
       export COV_FILE=${SOURCE_DIR}/.coveragerc_ci_${INTERP}
       export LANG="en_US.UTF-8"
+      export NUM_CPUS=$(python -c "from __future__ import print_function; import multiprocessing; print(multiprocessing.cpu_count())")
       echo "##vso[task.setvariable variable=INTERP]$INTERP"
       echo "##vso[task.setvariable variable=PKG_NAME]$PKG_NAME"
       echo "##vso[task.setvariable variable=PKG_NAME_ALT]$PKG_NAME_ALT"
@@ -117,6 +118,7 @@ jobs:
       echo "##vso[task.setvariable variable=PYTHONPATH]$PYTHONPATH"
       echo "##vso[task.setvariable variable=COV_FILE]$COV_FILE"
       echo "##vso[task.setvariable variable=LANG]$LANG"
+      echo "##vso[task.setvariable variable=NUM_CPUS]$NUM_CPUS"
     displayName: Set up environment
   - bash: |
       echo "INTERP=${INTERP}"
@@ -135,6 +137,7 @@ jobs:
       echo "PYTHONPATH=${PYTHONPATH}"
       echo "COV_FILE=${COV_FILE}"
       echo "LANG=${LANG}"
+      echo "NUM_CPUS=${NUM_CPUS}"
     displayName: Print environment
   - bash: |
       curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
@@ -261,7 +264,7 @@ jobs:
       for fname in ${PKG_LINT_FILES}; do
         echo "${fname}"
       done
-      pylint --rcfile="${EXTRA_DIR}/.pylintrc" "${PYLINT_CLI_APPEND}" --output-format=colorized --reports=no --score=no ${PKG_LINT_FILES} || exit 1
+      pylint --rcfile="${EXTRA_DIR}/.pylintrc" -j"${NUM_CPUS}" "${PYLINT_CLI_APPEND}" --output-format=colorized --reports=no --score=no ${PKG_LINT_FILES} || exit 1
       pydocstyle --config="${EXTRA_DIR}/.pydocstyle" ${PKG_LINT_FILES} || exit 1
     displayName: Check code standards compliance
   - bash: |
@@ -270,18 +273,18 @@ jobs:
       export ARTIFACTS_DIR="$("${SBIN_DIR}"/winnorm_path.py "${ARTIFACTS_DIR}")"
       if pytest --collect-only --doctest-glob="*.rst" "${EXTRA_DIR}"/docs &> /dev/null; then
         echo "Testing reStructuredText files"
-        pytest --doctest-glob="*.rst" "${EXTRA_DIR}"/docs || exit 1
+        pytest -n "${NUM_CPUS}" --doctest-glob="*.rst" "${EXTRA_DIR}"/docs || exit 1
       fi
       if pytest --collect-only --doctest-modules "${SOURCE_DIR}" &> /dev/null; then
         echo "Testing docstrings"
-        pytest --doctest-modules "${SOURCE_DIR}" || exit 1
+        pytest -n "${NUM_CPUS}" --doctest-modules "${SOURCE_DIR}" || exit 1
       fi
-      pytest --junitxml="${RESULTS_DIR}"/testresults/test-results.xml --cov-config="${COV_FILE}" --cov="${SOURCE_DIR}" --cov-report=xml --cov-report=html
+      pytest -n "${NUM_CPUS}" --junitxml="${RESULTS_DIR}"/testresults/test-results.xml --cov-config="${COV_FILE}" --cov="${SOURCE_DIR}" --cov-report=xml --cov-report=html
     displayName: Unit tests
   - bash: |
       export PYTHONPATH="$("${SBIN_DIR}"/winnorm_path.py "${PYTHONPATH}")"
       if [ -f "${SBIN_DIR}"/build_docs.py ]; then
-          "${SBIN_DIR}"/build_docs.py -r -t -d "$("${SBIN_DIR}"//winnorm_path.py "${SOURCE_DIR}")" || exit 1
+          "${SBIN_DIR}"/build_docs.py -r -t -n "${NUM_CPUS}" -d "$("${SBIN_DIR}"//winnorm_path.py "${SOURCE_DIR}")" || exit 1
       fi
     displayName: Documentation rebuild test
   - task: ArchiveFiles@2
