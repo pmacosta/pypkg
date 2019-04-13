@@ -11,19 +11,45 @@ trigger:
 
 jobs:
 
+# [[[cog
+# import os
+# PKG_NAME = os.path.basename(os.path.dirname(os.path.abspath(cog.inFile)))
+# exec("from " + PKG_NAME.replace("-", "_") + ".pkgdata import SUPPORTED_INTERPS")
+# cog.outl("- job: 'Test'")
+# cog.outl("  strategy:")
+# cog.outl("    matrix:")
+# PLATFORMS = {"linux":"ubuntu-16.04", "macos":"macos-10.13", "windows":"vs2017-win2016"}
+# for PLATFORM, IMAGE in PLATFORMS.items():
+#     for SUPPORTED_INTERP in SUPPORTED_INTERPS:
+#         cog.outl("      {0}_python{1}:".format(PLATFORM, str(SUPPORTED_INTERP).replace(".", "")))
+#         cog.outl("        imageName: '{0}'".format(IMAGE))
+#         cog.outl("        python.version: '{0}'".format(str(SUPPORTED_INTERP)))
+#         cog.outl("        aname: '{0}'".format(PLATFORM))
+#         cog.outl("        pyname: 'py{0}'".format(str(SUPPORTED_INTERP).replace(".", "")))
+# ]]]
 - job: 'Test'
   strategy:
     matrix:
-      linux_python27:
-        imageName: 'ubuntu-16.04'
-        python.version: '2.7'
-        aname: 'linux'
-        pyname: 'py27'
+      macos_python35:
+        imageName: 'macos-10.13'
+        python.version: '3.5'
+        aname: 'macos'
+        pyname: 'py35'
+      macos_python36:
+        imageName: 'macos-10.13'
+        python.version: '3.6'
+        aname: 'macos'
+        pyname: 'py36'
+      macos_python37:
+        imageName: 'macos-10.13'
+        python.version: '3.7'
+        aname: 'macos'
+        pyname: 'py37'
       linux_python35:
         imageName: 'ubuntu-16.04'
         python.version: '3.5'
         aname: 'linux'
-        pyname: 'py25'
+        pyname: 'py35'
       linux_python36:
         imageName: 'ubuntu-16.04'
         python.version: '3.6'
@@ -33,26 +59,6 @@ jobs:
         imageName: 'ubuntu-16.04'
         python.version: '3.7'
         aname: 'linux'
-        pyname: 'py37'
-      mac_python27:
-        imageName: 'macos-10.13'
-        python.version: '2.7'
-        aname: 'macos'
-        pyname: 'py27'
-      mac_python35:
-        imageName: 'macos-10.13'
-        python.version: '3.5'
-        aname: 'macos'
-        pyname: 'py35'
-      mac_python36:
-        imageName: 'macos-10.13'
-        python.version: '3.6'
-        aname: 'macos'
-        pyname: 'py36'
-      mac_python37:
-        imageName: 'macos-10.13'
-        python.version: '3.7'
-        aname: 'macos'
         pyname: 'py37'
       windows_python35:
         imageName: 'vs2017-win2016'
@@ -69,6 +75,7 @@ jobs:
         python.version: '3.7'
         aname: 'windows'
         pyname: 'py37'
+  # [[[end]]]
 
   pool:
     vmImage: $(imageName)
