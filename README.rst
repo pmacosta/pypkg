@@ -81,6 +81,7 @@
 ..         wrap(paragraph)
 ..     else:
 ..         cog.outl("")
+.. cog.outl("")
 .. cog.outl("Interpreter")
 .. cog.outl("===========")
 .. cog.outl("")
