@@ -240,6 +240,17 @@ def get_pkg_version():
     return pkgdata.__version__
 
 
+def get_sphinx_extensions():
+    """Return Sphinx extensions used by package."""
+    sys.path.append(get_src_dir())
+    import pkgdata
+
+    try:
+        return pkgdata.SPHINX_EXTENSIONS
+    except:
+        return []
+
+
 def get_src_dir():
     """Return package name."""
     # When requesting package directory for utility tasks, or when installing the
