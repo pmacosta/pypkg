@@ -182,7 +182,7 @@ setup(
     author_email=AUTHOR_EMAIL,
     description=SHORT_DESC,
     long_description=LONG_DESCRIPTION,
-    packages=[PKG_NAME],
+    packages=[PKG_NAME] + [PKG_NAME + "." + item for item in pkgdata.PKG_SUBMODULES],
     entry_points=get_entry_points(),
     data_files=DATA_FILES,
     zip_safe=False,
