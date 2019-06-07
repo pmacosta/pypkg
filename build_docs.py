@@ -28,7 +28,7 @@ import docutils.core
 
 # Intra-package imports
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-import functions
+import pypkg.functions
 
 try:
     from pypkg.refresh_moddb import refresh_moddb
@@ -49,8 +49,8 @@ except ImportError:
 ###
 # Global variables
 ###
-VALID_MODULES = [functions.get_pkg_name()]
-PKG_SUBMODULES = functions.get_pkg_submodules()
+VALID_MODULES = [pypkg.functions.get_pkg_name()]
+PKG_DOC_SUBMODULES = pypkg.functions.get_pkg_doc_submodules()
 
 
 ###
@@ -129,10 +129,10 @@ def build_pkg_docs(args):
         print("Python: {0}".format(sys.executable))
         print("PATH: {0}".format(os.environ["PATH"]))
         print("PYTHONPATH: {0}".format(os.environ["PYTHONPATH"]))
-        print("functions: {0}".format(functions.__file__))
-        print("functions.subprocess: {0}".format(functions.subprocess.__file__))
+        print("functions: {0}".format(pypkg.functions.__file__))
+        print("functions.subprocess: {0}".format(pypkg.functions.subprocess.__file__))
     if rebuild or test:
-        if not PKG_SUBMODULES:
+        if not PKG_DOC_SUBMODULES:
             print("No submodules defined, skipping exception documentation rebuilding")
         else:
             refresh_moddb()
@@ -157,7 +157,7 @@ def build_pkg_docs(args):
     shutil.rmtree(os.path.join(pkg_dir, "docs", "_build"), ignore_errors=True)
     cwd = os.getcwd()
     os.chdir(os.path.join(pkg_dir, "docs"))
-    functions.shcmd(
+    pypkg.functions.shcmd(
         [
             "sphinx-build",
             "-b",
@@ -386,7 +386,7 @@ def rebuild_module_doc(test, src_dir, tracer_dir):  # noqa
     # pylint: disable=R0913
     retcode = 0
     pkl_dir = tracer_dir
-    submodules = PKG_SUBMODULES
+    submodules = PKG_DOC_SUBMODULES
     for submodule in submodules:
         smf = os.path.join(src_dir, submodule + ".py")
         pkl_file = os.path.join(pkl_dir, submodule + ".pkl")
@@ -458,7 +458,7 @@ def generate_top_level_readme(pkg_dir):
     print("Generating top-level README.rst file")
     with open(fname, "r") as fobj:
         lines = [item.rstrip() for item in fobj.readlines()]
-    pkg_name = functions.get_pkg_name()
+    pkg_name = pypkg.functions.get_pkg_name()
     ref1_regexp = re.compile(".*:py:mod:`(.+) <" + pkg_name + ".(.+)>`.*")
     ref2_regexp = re.compile(".*:py:mod:`" + pkg_name + ".(.+)`.*")
     ref3_regexp = re.compile(r".*:ref:`(.+?)(\s+<.+>)*`.*")
@@ -569,7 +569,7 @@ def generate_top_level_readme(pkg_dir):
             # log in the commit message history
             if fname != "CHANGELOG.rst":
                 fname = os.path.join(docs_dir, base_fname)
-                for inc_line in functions._readlines(fname):
+                for inc_line in pypkg.functions._readlines(fname):
                     comment = inc_line.lstrip().startswith(".. ")
                     if (not comment) or (comment and rst_cmd_regexp.match(inc_line)):
                         ret.append(inc_line.rstrip())
@@ -619,7 +619,7 @@ def valid_num_cpus(value):
 
 if __name__ == "__main__":
     # pylint: disable=E0602
-    PKG_NAME = functions.get_pkg_name()
+    PKG_NAME = pypkg.functions.get_pkg_name()
     PKG_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     PARSER = argparse.ArgumentParser(
         description="Build " + PKG_NAME + " package documentation"

@@ -173,6 +173,17 @@ def get_pkg_desc():
     return pkgdata.PKG_DESC
 
 
+def get_pkg_doc_submodules():
+    """Return package documentation submodules."""
+    sys.path.append(get_src_dir())
+    import pkgdata
+
+    try:
+        return pkgdata.PKG_DOC_SUBMODULES
+    except:
+        return []
+
+
 def get_pkg_long_desc():
     """Return long package description."""
     sys.path.append(get_src_dir())
