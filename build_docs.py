@@ -10,7 +10,6 @@ from __future__ import print_function
 import argparse
 import datetime
 import difflib
-import glob
 import multiprocessing
 import os
 import platform
@@ -123,7 +122,6 @@ def build_pkg_docs(args):
     tracer_dir = os.path.join(pkg_dir, "docs", "support")
     os.environ["TRACER_DIR"] = tracer_dir
     # Processing
-    del_pkl_files(test, tracer_dir)
     print("Rebuilding documentation")
     if debug:
         print("Python: {0}".format(sys.executable))
@@ -219,14 +217,6 @@ def del_file(fname):
         os.remove(fname)
     except OSError:
         pass
-
-
-def del_pkl_files(test, tracer_dir):
-    """Delete all old pickle files."""
-    if test:
-        pkl_files = glob.glob(os.path.join(tracer_dir, "*.pkl"))
-        for pkl_file in pkl_files:
-            os.remove(pkl_file)
 
 
 def diff(file1, file2):
