@@ -42,7 +42,6 @@ clean: FORCE
 	@find $(PKG_DIR) -name '__pycache__' -delete
 	@find $(PKG_DIR) -name '.coverage*' -delete
 	@find $(PKG_DIR) -name '*.tmp' -delete
-	@find $(PKG_DIR) -name '*.pkl' -delete
 	@find $(PKG_DIR) -name '*.error' -delete
 	@rm -rf $(PKG_DIR)/build
 	@rm -rf	$(PKG_DIR)/dist
