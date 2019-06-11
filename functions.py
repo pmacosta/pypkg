@@ -302,14 +302,11 @@ def json_load(fname):
 
 def load_requirements(pkg_dir, pyver, cat="source"):
     """Get package names from requirements files."""
+    rtd = os.environ.get("READTHEDOCS", "")
     pyver = pyver.replace(".", "")
     reqs_dir = os.path.join(pkg_dir, "requirements")
     if cat.lower() == "source":
-        reqs_files = (
-            ["rtd.pip"]
-            if os.environ.get("READTHEDOCS", None) == "True"
-            else ["main_py{0}.pip".format(pyver)]
-        )
+        reqs_files = ["rtd.pip"] if rtd else ["main_py{0}.pip".format(pyver)]
     elif cat.lower() == "testing":
         reqs_files = ["tests_py{0}.pip".format(pyver), "docs_py{0}.pip".format(pyver)]
     else:
