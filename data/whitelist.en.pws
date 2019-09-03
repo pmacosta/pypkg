@@ -1,4 +1,4 @@
-personal_ws-1.1 en 1803 utf-8
+personal_ws-1.1 en 1809 utf-8
 a4paper
 aa
 aaa
@@ -149,8 +149,8 @@ C0111
 C0113
 C0411
 cadetblue
-callables
 callable's
+callables
 Callables
 CALLABLES
 capsys
@@ -430,6 +430,7 @@ eqs
 erec
 errisinstance
 errno
+esac
 esc
 euo
 eval
@@ -600,6 +601,7 @@ getframe
 getframeinfo
 getitem
 getmembers
+getopts
 getpid
 getreprcrash
 getsourcelines
@@ -1077,6 +1079,8 @@ opf
 oplevel
 oplist
 oprec
+OPTARG
+OPTIND
 orangered
 ord
 OrderedDict
@@ -1370,8 +1374,8 @@ rmul
 rnode
 rnum
 ro
-robj
 r'obj
+robj
 rootdir
 ror
 rosybrown
@@ -1424,6 +1428,7 @@ sdict
 sdicts
 sdiff
 sdir
+sdirs
 sdist
 seagreen
 searchsorted
@@ -1482,6 +1487,7 @@ SmartyPants
 smax
 smf
 smin
+sname
 snum
 sobj
 soline
@@ -1731,8 +1737,8 @@ W1113
 W9900
 W9904
 warnfunc
-waveforms
 waveform's
+waveforms
 Waveforms
 WaveInterpolationOption
 WaveInterpOption

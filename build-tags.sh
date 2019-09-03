@@ -2,7 +2,7 @@
 # build-tags.sh
 # Copyright (c) 2013-2019 Pablo Acosta-Serafini
 # See LICENSE for details
-# shellcheck disable=SC1090,SC1091
+# shellcheck disable=SC1090,SC1091,SC1117
 
 #
 #/ build-tags.sh
@@ -49,7 +49,7 @@ fi
 sdirs=$(\
     find \
     "${pkg_dir}" \
-    -path "${pkg_dir}/.tox" -prune \
+    \( -path "${pkg_dir}/.tox" -o -path "${pkg_dir}/.git" \) -prune \
     -o -name "*.py" \
     -exec dirname {} + | \
     sort -u \
@@ -58,8 +58,12 @@ fdirs=()
 for sdir in ${sdirs[*]}; do
     fdirs+=("$(readlink -f "${sdir}")")
 done
-cmd="ctags -V --tag-relative -f ${pkg_dir}/tags -R"
+first=0
 for fdir in ${fdirs[*]}; do
-    cmd="${cmd} \"${fdir}\"/*.py"
+    if [ "${first}" == 0 ]; then
+        ctags -V --tag-relative -f "${pkg_dir}"/tags -R "${fdir}"/*.py
+        first=1
+    else
+        ctags -a -V --tag-relative -f "${pkg_dir}"/tags -R "${fdir}"/*.py
+    fi
 done
-eval "${cmd}"
