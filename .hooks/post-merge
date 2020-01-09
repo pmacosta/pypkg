@@ -1,6 +1,6 @@
 #!/bin/bash
 # make-links.sh
-# Copyright (c) 2013-2019 Pablo Acosta-Serafini
+# Copyright (c) 2013-2020 Pablo Acosta-Serafini
 # See LICENSE for details
 
 # Find directory where script is
@@ -45,7 +45,7 @@ cog_file() {
     sbin_dir=$2
     fname=$3
     tmp_fname=$(mktemp)
-    if which cog.py &> /dev/null; then
+    if command -v cog.py &> /dev/null; then
         if ! cog.py -o "${tmp_fname}" "${sdir}/${fname}"; then
             rm -rf "${tmp_fname}"
             copy_file "${sbin_dir}" "${sdir}" "${fname}"
