@@ -86,9 +86,9 @@ fnames=( \
 for fname in ${fnames[*]}; do
     copy_file "${sbin_dir}" "${sdir}" "${fname}"
 done
+cog_file "${sdir}" "${sbin_dir}" azure-pipelines.yml
 if [ -d "${pkg_dir}/tests" ]; then
     fnames=( \
-        azure-pipelines.yml \
         tox.ini \
     )
     for fname in ${fnames[*]}; do
