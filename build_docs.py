@@ -266,6 +266,9 @@ def elapsed_time_string(start_time, stop_time):
 def insert_files_in_rsts(pkg_dir):
     """Cog-insert source files in Sphinx files."""
     fnames = [os.path.join(pkg_dir, "README.rst")]
+    fname = os.path.join(pkg_dir, "docs", "README.rst")
+    if os.path.exists(fname):
+        fnames = [fname] + fnames
     print("Inserting source files in documentation files")
     for fname in fnames:
         print("   Processing file {0}".format(fname))
