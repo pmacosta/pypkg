@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coveragerc_manager.py
-# Copyright (c) 2013-2019 Pablo Acosta-Serafini
+# Copyright (c) 2013-2020 Pablo Acosta-Serafini
 # See LICENSE for details
 # pylint: disable=C0111,C0413,W0403
 
@@ -47,7 +47,7 @@ def get_source_files(sdir, inc_init=False):
 
 
 def main(argv):
-    """Processing."""
+    """Generate configuration file."""
     # pylint: disable=R0912,R0914,R0915,W0702
     debug = True
     env = argv[0].strip('"').strip("'")

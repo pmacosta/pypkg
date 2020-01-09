@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # build_docs.py
-# Copyright (c) 2013-2019 Pablo Acosta-Serafini
+# Copyright (c) 2013-2020 Pablo Acosta-Serafini
 # See LICENSE for details
 # pylint: disable=C0111,C0411,C0413,E0611,E1129,F0401
 # pylint: disable=R0205,R0903,R0912,R0914,R0915,W0141,W1113

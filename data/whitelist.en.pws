@@ -1,4 +1,4 @@
-personal_ws-1.1 en 1809 utf-8
+personal_ws-1.1 en 1823 utf-8
 a4paper
 aa
 aaa
@@ -21,6 +21,7 @@ acttype
 addai
 addex
 addfinalizer
+aE
 AE
 aff
 agg
@@ -32,6 +33,7 @@ aline
 alist
 ALLSPHINXOPTS
 alphanums
+aN
 antiquewhite
 anumber
 aobj
@@ -709,6 +711,7 @@ iobj
 IOError
 iom
 iomm
+Ionel
 Ionel's
 ipsum
 IRawChecker
@@ -768,6 +771,7 @@ LambdaType
 lang
 lasti
 lastword
+LaTeX
 latexpdf
 latexpdfja
 lavenderblush
@@ -859,6 +863,7 @@ lvector
 macOS
 makedir
 makedirs
+makefile
 Makefile
 makeinfo
 makereport
@@ -903,6 +908,7 @@ mistyrose
 mkdir
 mkdtemp
 mkstemp
+mktemp
 mline
 mlines
 mlist
@@ -1002,6 +1008,7 @@ nom
 NoNe
 None's
 NONINFRINGEMENT
+nonlocal
 NonNegativeInteger
 NonNullString
 noopt
@@ -1072,6 +1079,7 @@ olivedrab
 oname
 oneOf
 online
+opath
 opensearch
 OpenSearch
 oper
@@ -1118,6 +1126,7 @@ passenv
 passthrough
 pathext
 PATHEXT
+pathname
 pathsep
 pb
 pcol
@@ -1313,6 +1322,7 @@ realpath
 rebase
 Rebase
 rect
+recurse
 recursed
 refactoring
 refstr
@@ -1395,6 +1405,7 @@ rsts
 rsub
 rtd
 RTD
+rtest
 rtext
 r'The
 rtol
@@ -1454,6 +1465,7 @@ sfn
 sfname
 sfunc
 sharex
+shat
 shcmd
 shellcheck
 ShellCheck
@@ -1745,6 +1757,7 @@ WaveInterpOption
 WaveScaleOption
 WaveVectors
 wb
+wc
 wcomplex
 wdir
 wfloat
@@ -1760,6 +1773,7 @@ wobj
 writelines
 writerows
 wround
+ws
 wsindent
 wsregexp
 wvalue

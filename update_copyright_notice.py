@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # update_copyright_notice.py
-# Copyright (c) 2013-2019 Pablo Acosta-Serafini
+# Copyright (c) 2013-2020 Pablo Acosta-Serafini
 # See LICENSE for details
 # pylint: disable=C0111
 
@@ -9,7 +9,6 @@ from __future__ import print_function
 import datetime
 import os
 import re
-import sys
 
 # Intra-package imports
 import pypkg.functions

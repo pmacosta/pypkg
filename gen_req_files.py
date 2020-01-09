@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # gen_req_files.py
-# Copyright (c) 2013-2019 Pablo Acosta-Serafini
+# Copyright (c) 2013-2020 Pablo Acosta-Serafini
 # See LICENSE for details
 # pylint: disable=C0111,C0413,E0602
 
@@ -50,7 +50,7 @@ def insert_element(items, item, pos):
     item = item + "\n"
     if (pos < len(items) - 1) and items[pos]:
         raise RuntimeError("Repeated order element")
-    elif pos < len(items) - 1:
+    if pos < len(items) - 1:
         items[pos] = item
     else:
         items.extend([""] * (pos + 1 - len(items)))
@@ -85,7 +85,7 @@ def gen_req_files(freeze_ver=False):
                             "include Python 2.7 for category {0}".format(cat)
                         )
                     )
-                elif not isinstance(pkg_dict["ver"], str):
+                if not isinstance(pkg_dict["ver"], str):
                     # ReadTheDocs build environment is Python 2.7
                     ver = pkg_dict["ver"]["py27"]
                 insert_element(
