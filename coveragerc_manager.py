@@ -8,6 +8,7 @@
 from __future__ import print_function
 import datetime
 import os
+import platform
 import sys
 
 # Intra-package imports
@@ -65,8 +66,9 @@ def main(argv):
         print("Tox mode")
         if len(argv[1:]) == 4:
             mode_flag, interp, _, site_pkg_dir, module = argv[1:] + [""]
-            tokens = site_pkg_dir.split("/")
-            site_pkg_dir = (os.sep).join(tokens)
+            if platform.system().lower() == "windows":
+                tokens = site_pkg_dir.split("/")
+                site_pkg_dir = "\\".join(tokens)
             print("   mode_flag: {0}".format(mode_flag))
             print("   interp: {0}".format(interp))
             print("   site_pkg_dir: {0}".format(site_pkg_dir))
