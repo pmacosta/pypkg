@@ -314,14 +314,10 @@ def pcolor(text, color, indent=0):
 
     :rtype: string
 
-    :raises:
-     * RuntimeError (Argument \`color\` is not valid)
-
-     * RuntimeError (Argument \`indent\` is not valid)
-
-     * RuntimeError (Argument \`text\` is not valid)
-
-     * ValueError (Unknown color *[color]*)
+    :raises RuntimeError: Argument \`color\` is not valid
+    :raises RuntimeError: Argument \`indent\` is not valid
+    :raises RuntimeError: Argument \`text\` is not valid
+    :raises ValueError: Unknown color *[color]*
     """
     esc_dict = {
         "black": 30,
