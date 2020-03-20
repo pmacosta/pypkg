@@ -58,12 +58,15 @@ fdirs=()
 for sdir in ${sdirs[*]}; do
     fdirs+=("$(readlink -f "${sdir}")")
 done
+tag_file="${pkg_dir}/tags"
+echo "Tag file: ${tag_file}"
+rm -rf "${tag_file}"
 first=0
 for fdir in ${fdirs[*]}; do
     if [ "${first}" == 0 ]; then
-        ctags -V --tag-relative -f "${pkg_dir}"/tags -R "${fdir}"/*.py
+        ctags -V --tag-relative -f "${tag_file}" -R "${fdir}"/*.py
         first=1
     else
-        ctags -a -V --tag-relative -f "${pkg_dir}"/tags -R "${fdir}"/*.py
+        ctags -a -V --tag-relative -f "${tag_file}" -R "${fdir}"/*.py
     fi
 done
