@@ -70,7 +70,8 @@ sdir=$(current_dir "${BASH_SOURCE[0]}")
 # Configure Git user name and email
 email=0
 personal_repo=0
-cfg_fname="${sdir}/repo-cfg.sh"
+cfg_fname="$(readlink -f "${sdir}/repo-cfg.sh")"
+echo "Checking config file ${cfg_fname}"
 if [ -f "${cfg_fname}" ]; then
     # shellcheck disable=SC1090,SC1091
     source "${sdir}/repo-cfg.sh"
@@ -78,15 +79,16 @@ else
     echo "Using default repo config"
 fi
 if [ "${email}" == 1 ]; then
+    echo "Configuring Git author information"
     if [ "${personal_repo}" == 1 ]; then
-        if [ "${PERSONAL_NAME}" != "" ] && [ "${PERSONAL_EMAIL}" != "" ]; then
-            echo "Configuring personal Git author information"
+        if [ -v PERSONAL_NAME ] && [ -v PERSONAL_EMAIL ]; then
+            echo -e "\\tPersonal"
             git config user.name "${PERSONAL_NAME}"
             git config user.email "${PERSONAL_EMAIL}"
         fi
     else
-        if [ "${WORK_NAME}" != "" ] && [ "${WORK_EMAIL}" != "" ]; then
-            echo "Configuring work Git author information"
+        if [ -v WORK_NAME ] && [ -v WORK_EMAIL ]; then
+            echo -e "\\tWork"
             git config user.name "${WORK_NAME}"
             git config user.email "${WORK_EMAIL}"
         fi
